@@ -60,27 +60,27 @@ int main() {
 
     m0 = 1; m1 = 2; m2 = 3; m3 = 4;
     m0 = asm_test(m0, m1, m2, m3);
-    if(m0 != 43) printf("Fail 1, %d\n", m0);
+    if(m0 != 43) fail();
 
     m0 = 8; m1 = 5; m2 = 6; m3 = 21;
     m0 = asm_test(m0, m1, m2, m3);
-    if(m0 != 1524) printf("Fail 2, %d\n", m0);
+    if(m0 != 1524) fail();
 
     m0 = 3; m1 = 4; m2 = 5; m3 = 1;
     m0 = asm_test(m0, m1, m2, m3);
-    if(m0 != 328) printf("Fail 3, %d\n", m0);
+    if(m0 != 328) fail();
 
     m0 = 3; m1 = 5; m2 = 7; m3 = 8;
     m0 = asm_test(m0, m1, m2, m3);
-    if(m0 != 931) printf("Fail 4, %d\n", m0);
+    if(m0 != 931) fail();
 
     m0 = 33; m1 = 22; m2 = 11; m3 = 0;
     m0 = asm_test(m0, m1, m2, m3);
-    if(m0 != 250239) printf("Fail 5, %d\n", m0);
+    if(m0 != 250239) fail();
 
     m0 = 42; m1 = 55; m2 = 12; m3 = 1;
     m0 = asm_test(m0, m1, m2, m3);
-    if(m0 != 9280754) printf("Fail 6, %d\n", m0);
+    if(m0 != 9280754) fail();
 
     ok();
 
