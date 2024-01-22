@@ -11,7 +11,13 @@ __attribute__(( naked )) int asm_test(int v0, int v1, int v2, int v3)
 			"push {r4, r5, r6, r7} \n" // do not remove
 			// do not add any code before this comment
 
-            
+            // M0 = (M0 + M1 * M1) * (M3 + M1 * M1) + M2
+            "mul r4, r1, r1 \n" // r4 = M1 * M1
+            "add r4, r0, r4 \n" // r4 = M0 + r4
+            "mul r5, r1, r1 \n" // r5 = M1 * M1
+            "add r5, r3, r5 \n" // r5 = M3 + r5
+            "mul r4, r4, r5 \n" // r4 = r4 * r5
+            "add r0, r4, r2 \n" // r0 = r4 + M2
 
 			// do not add any code after this comment
 			"pop {r4, r5, r6, r7} \n" // do not remove
@@ -33,6 +39,8 @@ void ok() {
 
 
 int main() {
+
+    stdio_init_all();
 
     const uint led_pin = 22;
 
