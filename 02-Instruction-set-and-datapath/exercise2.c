@@ -12,7 +12,7 @@ __attribute__(( naked )) int asm_test(int v0, int v1, int v2, int v3)
 			// do not add any code before this comment
 
             // M0 = (M0 + M1 * M1) * (M3 + M1 * M1) + M2
-            "mov r4, r0 \n" // r4 = M0
+            "mov r4, r1 \n" // r4 = M0
             "mul r4, r1, r4 \n" // r4 = M1 * M1
             "add r5, r0, r4 \n" // r5 = M0 + r4
             "add r6, r3, r4 \n" // r6 = M3 + r4
