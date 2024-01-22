@@ -12,12 +12,13 @@ __attribute__(( naked )) int asm_test(int v0, int v1, int v2, int v3)
 			// do not add any code before this comment
 
             // M0 = (M0 + M1 * M1) * (M3 + M1 * M1) + M2
-            "mul r4, r1, r1 \n" // r4 = M1 * M1
-            "add r4, r0, r4 \n" // r4 = M0 + r4
-            "mul r5, r1, r1 \n" // r5 = M1 * M1
-            "add r5, r3, r5 \n" // r5 = M3 + r5
-            "mul r4, r4, r5 \n" // r4 = r4 * r5
-            "add r0, r4, r2 \n" // r0 = r4 + M2
+            "mov r4, r0 \n" // r4 = M0
+            "mul r4, r1, r4 \n" // r4 = M1 * M1
+            "add r5, r0, r4 \n" // r5 = M0 + r4
+            "add r6, r3, r4 \n" // r6 = M3 + r4
+            "mul r5, r6, r5 \n" // r5 = r6 * r5 = (M0 + M1 * M1) * (M3 + M1 * M1)
+            "add r5, r5, r2 \n" // r5 = r5 + M2 = (M0 + M1 * M1) * (M3 + M1 * M1) + M2
+            "mov r0, r5 \n" // M0 = r5
 
 			// do not add any code after this comment
 			"pop {r4, r5, r6, r7} \n" // do not remove
@@ -59,27 +60,27 @@ int main() {
 
     m0 = 1; m1 = 2; m2 = 3; m3 = 4;
     m0 = asm_test(m0, m1, m2, m3);
-    if(m0 != 43) fail();
+    if(m0 != 43) printf("Fail 1, %d\n", m0);
 
     m0 = 8; m1 = 5; m2 = 6; m3 = 21;
     m0 = asm_test(m0, m1, m2, m3);
-    if(m0 != 1524) fail();
+    if(m0 != 1524) printf("Fail 2, %d\n", m0);
 
     m0 = 3; m1 = 4; m2 = 5; m3 = 1;
     m0 = asm_test(m0, m1, m2, m3);
-    if(m0 != 328) fail();
+    if(m0 != 328) printf("Fail 3, %d\n", m0);
 
     m0 = 3; m1 = 5; m2 = 7; m3 = 8;
     m0 = asm_test(m0, m1, m2, m3);
-    if(m0 != 931) fail();
+    if(m0 != 931) printf("Fail 4, %d\n", m0);
 
     m0 = 33; m1 = 22; m2 = 11; m3 = 0;
     m0 = asm_test(m0, m1, m2, m3);
-    if(m0 != 250239) fail();
+    if(m0 != 250239) printf("Fail 5, %d\n", m0);
 
     m0 = 42; m1 = 55; m2 = 12; m3 = 1;
     m0 = asm_test(m0, m1, m2, m3);
-    if(m0 != 9280754) fail();
+    if(m0 != 9280754) printf("Fail 6, %d\n", m0);
 
     ok();
 
