@@ -8,9 +8,19 @@ __attribute__(( naked )) void asm_test(int *a, int *b, int *c, int *d)
   (
 	"push {r4, r5, r6, r7} \n" // do not remove
 
-	"ldr r7, [r0] \n" // example assembly code - replace with your own code
-	"add r4, r7, r2 \n" // example assembly code replace with your own code
-	// add more code here
+    //  M0 = (M0 + M1 * M1) * (M3 + M1 * M1) + M2
+
+    "ldr r7, [r0] \n" // r7 = M0
+    "ldr r1, [r1] \n" // r1 = M1
+    "ldr r2, [r2] \n" // r2 = M2
+    "ldr r3, [r3] \n" // r3 = M3
+
+    "mul r1, r1, r1 \n" // r1 = M1 * M1
+    "add r5, r7, r1 \n" // r5 = M0 + r1
+    "add r6, r3, r1 \n" // r6 = M3 + r1
+    "mul r5, r6, r5 \n" // r5 = r6 * r5 = (M0 + M1 * M1) * (M3 + M1 * M1)
+    "add r7, r5, r2 \n" // r7 = r5 + M2 = (M0 + M1 * M1) * (M3 + M1 * M1) + M2
+    "str r7, [r0] \n" // M0 = r7
 
 	"pop {r4, r5, r6, r7} \n" // do not remove
 	"bx lr \n" // do not remove
