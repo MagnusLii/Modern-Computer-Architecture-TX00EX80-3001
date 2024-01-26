@@ -1,30 +1,31 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 
-__attribute__(( naked )) int difference(int a, int b)
+__attribute__(( naked )) void asm_test(int *a, int *b, int *c, int *d)
 {
-    // the values passed to your program are in registers
-    // R0 = a, R1 = b
-    // write your code between push and pop instructions
-    // make sure return value is in R0 after calculation
-    asm volatile
-    (
-        "push {r4, r5, r6, r7} \n" // do not remove
-        
-        "sub r0, r0, r1 \n"
-        "cmp r0, #0 \n"
-        "blt neg \n"
-        "b end \n"
+  // write your code between push and pop instructions
+  asm volatile
+  (
+	"push {r4, r5, r6, r7} \n" // do not remove
 
-        "neg: \n"
-        "mvn r0, r0 \n"
-        "add r0, r0, #1 \n"
+    //  M0 = (M0 + M1 * M1) * (M3 + M1 * M1) + M2
 
-        "end: \n"
-        "pop {r4, r5, r6, r7} \n" // do not remove
-        "bx lr \n" // do not remove
-    );
+    "ldr r0, [r0] \n" // r0 = M0
+    "ldr r1, [r1] \n" // r1 = M1
+    "ldr r2, [r2] \n" // r2 = M2
+    "ldr r3, [r3] \n" // r3 = M3
+    
+    "mul r1, r1, r1 \n" // r1 = M1 * M1
+    "add r5, r0, r1 \n" // r5 = M0 + r1
+    "add r6, r3, r1 \n" // r6 = M3 + r1
+    "mul r5, r6, r5 \n" // r5 = r6 * r5 = (M0 + M1 * M1) * (M3 + M1 * M1)
+    "add r0, r5, r2 \n" // r0 = r5 + M2 = (M0 + M1 * M1) * (M3 + M1 * M1) + M2
+
+	"pop {r4, r5, r6, r7} \n" // do not remove
+	"bx lr \n" // do not remove
+  );
 }
+
 
 void fail() {
     printf("Failed\n"); // set a break point here
@@ -49,16 +50,36 @@ int main()
     // Initialize chosen serial port
     stdio_init_all();
 
+    int m0;
+    int m1;
+    int m2;
+    int m3;
 
-    if(difference(-9, 7) != 16) fail();
-    if(difference(-19, -1) != 18) fail();
-    if(difference(22, 5) != 17) fail();
-    if(difference(8, 18) != 10) fail();
-    if(difference(28, -14) != 42) fail();
-    if(difference(0, 7) != 7) fail();
-    if(difference(-1, 0) != 1) fail();
+    m0 = 1; m1 = 2; m2 = 3; m3 = 4;
+    asm_test(&m0, &m1, &m2, &m3);
+    if(m0 != 43) fail();
 
-    ok();
+    m0 = 8; m1 = 5; m2 = 6; m3 = 21;
+    asm_test(&m0, &m1, &m2, &m3);
+    if(m0 != 1524) fail();
+
+    m0 = 3; m1 = 4; m2 = 5; m3 = 1;
+    asm_test(&m0, &m1, &m2, &m3);
+    if(m0 != 328) fail();
+
+    m0 = 3; m1 = 5; m2 = 7; m3 = 8;
+    asm_test(&m0, &m1, &m2, &m3);
+    if(m0 != 931) fail();
+
+    m0 = 33; m1 = 22; m2 = 11; m3 = 0;
+    asm_test(&m0, &m1, &m2, &m3);
+    if(m0 != 250239) fail();
+
+    m0 = 42; m1 = 55; m2 = 12; m3 = 1;
+    asm_test(&m0, &m1, &m2, &m3);
+    if(m0 != 9280754) fail();
+
+	ok();
 
     // Loop forever
     while (true) {
@@ -71,3 +92,4 @@ int main()
 
     return 0;
 }
+	
