@@ -10,10 +10,15 @@ __attribute__(( naked )) int difference(int a, int b)
     asm volatile
     (
         "push {r4, r5, r6, r7} \n" // do not remove
+        
         "sub r0, r0, r1 \n"
-        "mov r2, #1 \n"
-        "lsl r2, r2, #31 \n"  // Shift left to set the sign bit
-        "eor r0, r0, r2 \n" // XOR r0 and r2
+        "cmp r0, #0 \n"
+        "blt neg \n"
+
+        "neg: \n"
+        "mvn r0, r0 \n"
+        "add r0, r0, #1 \n"
+
         "pop {r4, r5, r6, r7} \n" // do not remove
         "bx lr \n" // do not remove
     );
