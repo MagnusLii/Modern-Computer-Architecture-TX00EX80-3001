@@ -10,8 +10,8 @@ __attribute__(( naked )) int difference(int a, int b)
     asm volatile
     (
         "push {r4, r5, r6, r7} \n" // do not remove
-        "push r0 \n"
-        "push r1 \n"
+        "mov r0 \n"
+        "mov r1 \n"
         "sub r0, r0, r1 \n"
         "mov r2, #0x80000000 \n" // create a mask with the sign bit set to 1
         "eor r0, r0, r2 \n" // XOR r0 and r2
