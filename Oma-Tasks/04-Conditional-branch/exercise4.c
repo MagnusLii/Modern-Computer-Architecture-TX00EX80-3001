@@ -10,9 +10,17 @@ __attribute__(( naked )) int difference(int a, int b)
     asm volatile
     (
         "push {r4, r5, r6, r7} \n" // do not remove
-        // execute compare instruction to set flags before conditional branch
-        // "cmp ..... \n"
-        // some code here
+        
+        "sub r0, r0, r1 \n"
+        "cmp r0, #0 \n"
+        "blt neg \n"
+        "b end \n"
+
+        "neg: \n"
+        "mvn r0, r0 \n"
+        "add r0, r0, #1 \n"
+
+        "end: \n"
         "pop {r4, r5, r6, r7} \n" // do not remove
         "bx lr \n" // do not remove
     );
