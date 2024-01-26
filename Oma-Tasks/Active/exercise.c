@@ -10,7 +10,7 @@ __attribute__(( naked )) void asm_test(int *a, int *b, int *c, int *d)
 
     //  M0 = (M0 + M1 * M1) * (M3 + M1 * M1) + M2
 
-    "ldr r7, [r7] \n" // r7 = M0
+    "ldr r7, [r0] \n" // r7 = M0
     "ldr r1, [r1] \n" // r1 = M1
     "ldr r2, [r2] \n" // r2 = M2
     "ldr r3, [r3] \n" // r3 = M3
