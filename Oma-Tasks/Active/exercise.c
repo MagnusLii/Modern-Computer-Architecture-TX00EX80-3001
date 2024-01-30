@@ -18,9 +18,8 @@ __attribute__(( naked )) int prt(const char *a)
 			// them safe. R4-R7 will not be modified by Board_UARTPutChar
 
 			"mov r4, r0 \n" // Copy array start loc to r4.
-			"mov r5, #0 \n" // not used
 
-			"start: \n" // Loop label.
+			"start: \n"
 
 			"ldrb r0, [r4] \n" // Load next letter.
 
@@ -35,7 +34,7 @@ __attribute__(( naked )) int prt(const char *a)
 
 			"b print \n" // else GOTO print.
 
-			"lowercase: \n" // Lowercase label.
+			"lowercase: \n"
 			"cmp r0, #'z' \n" // Compare r0 to 'z'.
 			"bgt print \n" // If more, GOTO print.
 			"add r0, r0, #13 \n" // Add 13 to r0.
@@ -46,7 +45,7 @@ __attribute__(( naked )) int prt(const char *a)
 			"add r0, r0, #'a' \n" // Add 'a' to r0.
 			"b print \n" // GOTO print.
 
-			"uppercase: \n" // Uppercase label.
+			"uppercase: \n"
 			"cmp r0, #'Z' \n" // Compare r0 to 'Z'.
 			"bgt print \n" // If more, GOTO print.
 			"add r0, r0, #13 \n" // Add 13 to r0.
@@ -55,9 +54,8 @@ __attribute__(( naked )) int prt(const char *a)
 			"sub r0, r0, #'Z' \n" // Subtract 'Z' from r0.
 			"sub r0, r0, #1 \n" // Subtract 1 from r0 to account for overflow.
 			"add r0, r0, #'A' \n" // Add 'A' to r0.
-			"b print \n" // GOTO print.
 
-			"print: \n" // Print label.
+			"print: \n"
 			"bl putchar \n" // Call putchar subroutine.
 			"add r4, r4, #1 \n" // Increment r4 by 1
 			"b start \n" // GOTO start.
@@ -66,6 +64,17 @@ __attribute__(( naked )) int prt(const char *a)
 			"pop { r4, pc } \n" // cortex-M0 requires popping to PC if LR was pushed
             // popping to PC will cause return from subroutine (~same as "bx lr")
 	);
+}
+
+void fail() {
+    printf("Failed\n"); // set a break point here
+    while(1) {
+        tight_loop_contents();
+    }
+}
+
+void ok() {
+    printf("\nAll ok\n"); // set a break point here
 }
 
 int main(void) {
@@ -79,11 +88,30 @@ int main(void) {
     // Initialize chosen serial port
     stdio_init_all();
 
-	char line[100] = "The quick brown fox jumps over the lazy dog.";
-	//printf("Enter sentence to encrypt: ");
-	//fgets(line, 100, stdin);
+	// TODO: insert code here
+	printf("\nExercise5\n");
 
-	prt(line);
+	char test1[] = "Computer Architecture\n";
+	char test2[] = "Computer Architecture\n";
+	prt(test1);
+	if(strcmp(test1, test2)) {
+		fail(); // error - string modified
+	}
+	char test3[] = "Johnny Ca$h:Live @Folsom\n";
+	char test4[] = "Johnny Ca$h:Live @Folsom\n";
+	prt(test3);
+	if(strcmp(test3, test4)) {
+        fail(); // error - string modified
+	}
+
+	char test5[] = "If you like to gamble, I tell you I'm your man\n";
+	char test6[] = "If you like to gamble, I tell you I'm your man\n";
+	prt(test5);
+	if(strcmp(test5, test6)) {
+        fail(); // error - string modified
+	}
+
+    ok();
 
     // Loop forever
     while (true) {
