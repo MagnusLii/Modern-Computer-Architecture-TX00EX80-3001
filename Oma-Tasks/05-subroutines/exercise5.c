@@ -52,12 +52,12 @@ __attribute__(( naked )) int rot13(const char *a)
 
 			"mov r4, r0 \n" // Copy array start loc to r4.
 
-			"start: \n"
+			"start1: \n"
 
 			"ldrb r0, [r4] \n" // Load next letter.
 
 			"cmp r0, #0 \n" // Compare r0 to 0.
-			"beq end \n" // If true, GOTO end.
+			"beq end1 \n" // If true, GOTO end.
 
 			"cmp r0, #'a' \n" // Compare r0 to 'a'.
 			"bge lowercase \n" // If more, GOTO lowercase.
@@ -65,35 +65,35 @@ __attribute__(( naked )) int rot13(const char *a)
 			"cmp r0, #'A' \n" // Compare r0 to 'A'.
 			"bge uppercase \n" // If more, GOTO uppercase.
 
-			"b print \n" // else GOTO print.
+			"b 1 \n" // else GOTO print.
 
 			"lowercase: \n"
 			"cmp r0, #'z' \n" // Compare r0 to 'z'.
-			"bgt print \n" // If more, GOTO print.
+			"bgt print1 \n" // If more, GOTO print.
 			"add r0, r0, #13 \n" // Add 13 to r0.
 			"cmp r0, #'z' \n" // Compare r0 to 'z'.
-			"ble print \n" // If less or equal, GOTO print.
+			"ble print1 \n" // If less or equal, GOTO print.
 			"sub r0, r0, #'z' \n" // Subtract 'z' from r0.
 			"sub r0, r0, #1 \n" // Subtract 1 from r0 to account for overflow.
 			"add r0, r0, #'a' \n" // Add 'a' to r0.
-			"b print \n" // GOTO print.
+			"b print1 \n" // GOTO print.
 
 			"uppercase: \n"
 			"cmp r0, #'Z' \n" // Compare r0 to 'Z'.
-			"bgt print \n" // If more, GOTO print.
+			"bgt print1 \n" // If more, GOTO print.
 			"add r0, r0, #13 \n" // Add 13 to r0.
 			"cmp r0, #'Z' \n" // Compare r0 to 'Z'.
-			"ble print \n" // If less or equal, GOTO print.
+			"ble print1 \n" // If less or equal, GOTO print.
 			"sub r0, r0, #'Z' \n" // Subtract 'Z' from r0.
 			"sub r0, r0, #1 \n" // Subtract 1 from r0 to account for overflow.
 			"add r0, r0, #'A' \n" // Add 'A' to r0.
 
-			"print: \n"
+			"print1: \n"
 			"bl putchar \n" // Call putchar subroutine.
 			"add r4, r4, #1 \n" // Increment r4 by 1
-			"b start \n" // GOTO start.
+			"b start1 \n" // GOTO start.
 
-			"end: \n"
+			"end1: \n"
 			"pop { r4, pc } \n"
 	);
 }
@@ -123,7 +123,7 @@ int main(void) {
 	// TODO: insert code here
 	printf("\nExercise5\n");
 
-	printf("Test 1\n")
+	printf("Test 1\n");
 	char test1[] = "Computer Architecture\n";
 	char test2[] = "Computer Architecture\n";
 	printf("lowercase: ");
