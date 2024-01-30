@@ -27,7 +27,7 @@ __attribute__(( naked )) int prt(const char *a)
 			"cmp r0, #0 \n" // Compare r0 to 0.
 			"beq end \n" // If true, GOTO end.
 
-			"cmp r0, #'Z' \n" // Compare r0 to 'z'.
+			"cmp r0, #'Z' \n" // Compare r0 to 'Z'.
 			"bgt print \n" // If more, GOTO print.
 
 			"cmp r0, #'a' \n" // Compare r0 to 'a'.
