@@ -28,10 +28,10 @@ __attribute__(( naked )) int prt(const char *a)
 			"beq end \n" // If true, GOTO end.
 
 			"cmp r0, #'a' \n" // Compare r0 to 'a'.
-			"bgt lowercase \n" // If more, GOTO lowercase.
+			"bge lowercase \n" // If more, GOTO lowercase.
 
 			"cmp r0, #'A' \n" // Compare r0 to 'A'.
-			"bgt uppercase \n" // If more, GOTO uppercase.
+			"bge uppercase \n" // If more, GOTO uppercase.
 
 			"b print \n" // else GOTO print.
 
