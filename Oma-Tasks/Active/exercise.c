@@ -27,16 +27,17 @@ __attribute__(( naked )) int prt(const char *a)
 			"cmp r0, #0 \n" // Compare r0 to 0.
 			"beq end \n" // If true, GOTO end.
 
-			"cmp r0, #'z' \n" // Compare r0 to 'z'.
-			"bgt print \n" // If more, GOTO print.
+			"cmp r0, #'a' \n" // Compare r0 to 'a'.
+			"bgt lowercase \n" // If more, GOTO lowercase.
 
 			"cmp r0, #'A' \n" // Compare r0 to 'A'.
-			"blt print \n" // If less, GOTO print.
+			"bgt uppercase \n" // If more, GOTO uppercase.
 
-			"cmp r0, #'a' \n" // Compare r0 to 'a'.
-			"bgt uppercase \n" // If more, GOTO print.
+			"b print \n" // else GOTO print.
 
 			"lowercase: \n" // Lowercase label.
+			"cmp r0, #'z' \n" // Compare r0 to 'z'.
+			"bgt print \n" // If more, GOTO print.
 			"add r0, r0, #13 \n" // Add 13 to r0.
 			"cmp r0, #'z' \n" // Compare r0 to 'z'.
 			"ble print \n" // If less or equal, GOTO print.
@@ -45,6 +46,8 @@ __attribute__(( naked )) int prt(const char *a)
 			"b print \n" // GOTO print.
 
 			"uppercase: \n" // Uppercase label.
+			"cmp r0, #'Z' \n" // Compare r0 to 'Z'.
+			"bgt print \n" // If more, GOTO print.
 			"add r0, r0, #13 \n" // Add 13 to r0.
 			"cmp r0, #'Z' \n" // Compare r0 to 'Z'.
 			"ble print \n" // If less or equal, GOTO print.
