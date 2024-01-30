@@ -10,24 +10,33 @@ __attribute__(( naked )) int prt(const char *a)
 	// push any register above r3 at the beginning and pop the same registers at the end
 	// note: lr needs to be pushed because we are calling another subroutine
     // cortex-M0 requires popping to PC if LR was pushed. See the code below
-    asm volatile
-    (
-        "push {r4, lr} \n"      // Save r4 and lr
-        "loop: \n"
-        "ldrb r4, [r0], #1 \n"  // Load a byte from the string and increment the pointer
-        "cmp r4, #0 \n"         // Check if the byte is null (end of string)
-        "beq end \n"
-        "cmp r4, #'A' \n"       // Compare with ASCII code of 'A'
-        "blt print_char \n"     // If less than 'A', print the character unmodified
-        "cmp r4, #'Z' \n"       // Compare with ASCII code of 'Z'
-        "bgt print_char \n"     // If greater than 'Z', print the character unmodified
-        "orr r4, r4, #32 \n"    // Convert uppercase to lowercase by setting bit 5
-        "print_char: \n"
-        "bl putchar \n"          // Call putchar with the modified or unmodified character
-        "b loop \n"             // Repeat for the next character
-        "end: \n"
-        "pop {r4, pc} \n"        // Restore r4 and return
-    );
+	asm volatile
+	(
+			"push { r4, lr } \n" // we need to save return address because we call another subroutine
+			// r0 - r3 can (and will be) modified by putchar
+			// so you have save the values yourself if you wish to keep
+			// them safe. R4-R7 will not be modified by Board_UARTPutChar
+
+			"start: \n" // start of loop
+			"ldrb r4, [r0], #1 \n" // load byte from str.
+			"cmp r4, #0 \n" // compare byte to 0
+			"beq end \n" // if if 0 GOTO end
+			
+			"cmp r4, #'A' \n" // compare byte to A
+			"blt print \n" // if less GOTO print
+
+			"cmp r4, #'Z' \n" // compare byte to Z
+			"bgt print \n" // if higher GOTO print
+
+			"orr r4, r4, #0x20 \n" // convert to lower case
+
+			"print: \n"
+			"bl putchar \n"  // print r0.
+
+			"end: \n" // end of func
+			"pop { r4, pc } \n" // cortex-M0 requires popping to PC if LR was pushed
+            // popping to PC will cause return from subroutine (~same as "bx lr")
+	);
 }
 
 void fail() {
