@@ -41,7 +41,7 @@ __attribute__(( naked )) int prt(const char *a)
 			"cmp r0, #'z' \n" // Compare r0 to 'z'.
 			"ble print \n" // If less or equal, GOTO print.
 			"sub r0, r0, #'z' \n" // Subtract 'z' from r0.
-			"add r0, #97, r0 \n" // Add 'a' to r0. 97 = 'a'
+			"add r0, r0, #'a' \n" // Add 'a' to r0.
 			"b print \n" // GOTO print.
 
 			"uppercase: \n" // Uppercase label.
@@ -49,7 +49,7 @@ __attribute__(( naked )) int prt(const char *a)
 			"cmp r0, #'Z' \n" // Compare r0 to 'Z'.
 			"ble print \n" // If less or equal, GOTO print.
 			"sub r0, r0, #'Z' \n" // Subtract 'Z' from r0.
-			"add r0, #65, r0 \n" // Add 'A' to r0. 65 = 'A'
+			"add r0, r0, #'A' \n" // Add 'A' to r0.
 			"b print \n" // GOTO print.
 
 			"print: \n" // Print label.
