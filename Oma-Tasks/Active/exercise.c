@@ -20,10 +20,9 @@ __attribute__(( naked )) int prt(const char *a)
 			"mov r4, r0 \n" // Copy array start loc to r4.
 			"mov r5, #0 \n" // not used
 
-			"start: \n" // Start label.
-			"loop: \n" // Loop label.
+			"start: \n" // Loop label.
 
-			"ldrb r0, [r4, r5] \n" // Load next letter.
+			"ldrb r0, [r4] \n" // Load next letter.
 
 			"cmp r0, #0 \n" // Compare r0 to 0.
 			"beq end \n" // If true, GOTO end.
@@ -75,9 +74,9 @@ int main(void) {
     // Initialize chosen serial port
     stdio_init_all();
 
-	char line[100];
-	printf("Enter sentence to encrypt: ");
-	fgets(line, 100, stdin);
+	char line[100] = "The quick brown fox jumps over the lazy dog.";
+	//printf("Enter sentence to encrypt: ");
+	//fgets(line, 100, stdin);
 
 	prt(line);
 
