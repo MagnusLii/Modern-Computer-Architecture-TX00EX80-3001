@@ -10,17 +10,24 @@ __attribute__(( naked )) int prt(const char *a)
 	// push any register above r3 at the beginning and pop the same registers at the end
 	// note: lr needs to be pushed because we are calling another subroutine
     // cortex-M0 requires popping to PC if LR was pushed. See the code below
-	asm volatile
-	(
-			"push { r4, lr } \n" // we need to save return address because we call another subroutine
-			"mov r0, #0x41 \n"
-			// r0 - r3 can (and will be) modified by putchar
-			// so you have save the values yourself if you wish to keep
-			// them safe. R4-R7 will not be modified by Board_UARTPutChar
-			"bl putchar \n"
-			"pop { r4, pc } \n" // cortex-M0 requires popping to PC if LR was pushed
-            // popping to PC will cause return from subroutine (~same as "bx lr")
-	);
+    asm volatile
+    (
+        "push {r4, lr} \n"      // Save r4 and lr
+        "loop: \n"
+        "ldrb r4, [r0], #1 \n"  // Load a byte from the string and increment the pointer
+        "cmp r4, #0 \n"         // Check if the byte is null (end of string)
+        "beq end \n"
+        "cmp r4, #'A' \n"       // Compare with ASCII code of 'A'
+        "blt print_char \n"     // If less than 'A', print the character unmodified
+        "cmp r4, #'Z' \n"       // Compare with ASCII code of 'Z'
+        "bgt print_char \n"     // If greater than 'Z', print the character unmodified
+        "orr r4, r4, #32 \n"    // Convert uppercase to lowercase by setting bit 5
+        "print_char: \n"
+        "bl putchar \n"          // Call putchar with the modified or unmodified character
+        "b loop \n"             // Repeat for the next character
+        "end: \n"
+        "pop {r4, pc} \n"        // Restore r4 and return
+    );
 }
 
 void fail() {
@@ -69,7 +76,7 @@ int main(void) {
 	}
 
     ok();
-
+	
     // Loop forever
     while (true) {
         // Blink LED
