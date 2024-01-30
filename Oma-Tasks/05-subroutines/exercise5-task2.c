@@ -4,12 +4,6 @@
 
 __attribute__(( naked )) int prt(const char *a)
 {
-	// the pointer to a character array is passed to the
-	// subroutine in R0
-	// remember to follow AAPCS:
-	// push any register above r3 at the beginning and pop the same registers at the end
-	// note: lr needs to be pushed because we are calling another subroutine
-    // cortex-M0 requires popping to PC if LR was pushed. See the code below
 	asm volatile
 	(
 			"push { r4, lr } \n"
