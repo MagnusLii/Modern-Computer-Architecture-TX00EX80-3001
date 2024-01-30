@@ -20,6 +20,7 @@ __attribute__(( naked )) int prt(const char *a)
 			"mov r4, r0 \n" // Copy array start loc to r4.
 			"mov r5, #0 \n" // not used
 
+			"start: \n" // Start label.
 			"loop: \n" // Loop label.
 
 			"ldrb r0, [r4, r5] \n" // Load next letter.
