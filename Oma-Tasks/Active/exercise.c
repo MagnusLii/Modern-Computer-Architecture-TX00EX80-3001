@@ -27,6 +27,7 @@ __attribute__(( naked )) int prt(const char *a)
 
 			"bl putchar \n" // call putchar subroutine
 			"add r4, r4, #1 \n" // increment r4 by 1
+			"b start \n" // GOTO start
 
 			"end: \n" // end of loop
 			"pop { r4, pc } \n" // cortex-M0 requires popping to PC if LR was pushed
