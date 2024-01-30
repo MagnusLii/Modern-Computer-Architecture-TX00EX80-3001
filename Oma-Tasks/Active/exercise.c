@@ -25,6 +25,15 @@ __attribute__(( naked )) int prt(const char *a)
 			"cmp r0, #0 \n" // compare r0 to 0
 			"beq end \n" // if true GOTO end
 
+			"cmp r0, #'A' \n" // compare r0 to 'A'
+			"blt print \n" // if less, GOTO print
+
+			"cmp r0, #'Z' \n" // compare r0 to 'Z'
+			"bgt print \n" // if more, GOTO print
+
+			"add r0, r0, #32 \n" // convert to lowercase
+
+			"print: \n" // print character
 			"bl putchar \n" // call putchar subroutine
 			"add r4, r4, #1 \n" // increment r4 by 1
 			"b start \n" // GOTO start
