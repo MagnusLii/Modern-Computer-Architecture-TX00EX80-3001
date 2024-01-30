@@ -17,23 +17,18 @@ __attribute__(( naked )) int prt(const char *a)
 			// so you have save the values yourself if you wish to keep
 			// them safe. R4-R7 will not be modified by Board_UARTPutChar
 
+			"mov r4, r0 \n" // copy array start loc to r4
+
 			"start: \n" // start of loop
-			"ldrb r4, [r0], #1 \n" // load byte from str.
-			"cmp r4, #0 \n" // compare byte to 0
-			"beq end \n" // if if 0 GOTO end
-			
-			"cmp r4, #'A' \n" // compare byte to A
-			"blt print \n" // if less GOTO print
+			"ldrb r0, [r4] \n"
 
-			"cmp r4, #'Z' \n" // compare byte to Z
-			"bgt print \n" // if higher GOTO print
+			"cmp r0, #0 \n" // compare r0 to 0
+			"beq end \n" // if true GOTO end
 
-			"orr r4, r4, #0x20 \n" // convert to lower case
+			"bl putchar \n" // call putchar subroutine
+			"add r4, r4, #1 \n" // increment r4 by 1
 
-			"print: \n"
-			"bl putchar \n"  // print r0.
-
-			"end: \n" // end of func
+			"end: \n" // end of loop
 			"pop { r4, pc } \n" // cortex-M0 requires popping to PC if LR was pushed
             // popping to PC will cause return from subroutine (~same as "bx lr")
 	);
