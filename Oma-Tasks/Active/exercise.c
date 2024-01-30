@@ -34,7 +34,7 @@ __attribute__(( naked )) int prt(const char *a)
 			"blt print \n" // If less, GOTO print.
 
 			"cmp r0, #'A' \n" // Compare r0 to 'A'.
-			"bgt uppercase \n" // If more, GOTO print.
+			"blt uppercase \n" // If more, GOTO print.
 
 			"lowercase: \n" // Lowercase label.
 			"add r0, r0, #13 \n" // Add 13 to r0.
