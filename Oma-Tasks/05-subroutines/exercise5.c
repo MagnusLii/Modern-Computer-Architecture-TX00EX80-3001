@@ -13,11 +13,32 @@ __attribute__(( naked )) int prt(const char *a)
 	asm volatile
 	(
 			"push { r4, lr } \n" // we need to save return address because we call another subroutine
-			"mov r0, #0x41 \n"
 			// r0 - r3 can (and will be) modified by putchar
 			// so you have save the values yourself if you wish to keep
 			// them safe. R4-R7 will not be modified by Board_UARTPutChar
-			"bl putchar \n"
+
+			"mov r4, r0 \n" // copy array start loc to r4
+
+			"start: \n" // start of loop
+			"ldrb r0, [r4] \n"
+
+			"cmp r0, #0 \n" // compare r0 to 0
+			"beq end \n" // if true GOTO end
+
+			"cmp r0, # \n" // compare r0 to 'A'
+			"blt print \n" // if less, GOTO print
+
+			"cmp r0, #'Z' \n" // compare r0 to 'Z'
+			"bgt print \n" // if more, GOTO print
+
+			"add r0, r0, #32 \n" // convert to lowercase
+
+			"print: \n" // print character
+			"bl putchar \n" // call putchar subroutine
+			"add r4, r4, #1 \n" // increment r4 by 1
+			"b start \n" // GOTO start
+
+			"end: \n" // end of loop
 			"pop { r4, pc } \n" // cortex-M0 requires popping to PC if LR was pushed
             // popping to PC will cause return from subroutine (~same as "bx lr")
 	);
@@ -69,7 +90,7 @@ int main(void) {
 	}
 
     ok();
-	
+
     // Loop forever
     while (true) {
         // Blink LED
