@@ -27,14 +27,14 @@ __attribute__(( naked )) int prt(const char *a)
 			"cmp r0, #0 \n" // Compare r0 to 0.
 			"beq end \n" // If true, GOTO end.
 
-			"cmp r0, #'Z' \n" // Compare r0 to 'Z'.
+			"cmp r0, #'z' \n" // Compare r0 to 'z'.
 			"bgt print \n" // If more, GOTO print.
 
-			"cmp r0, #'a' \n" // Compare r0 to 'a'.
+			"cmp r0, #'A' \n" // Compare r0 to 'A'.
 			"blt print \n" // If less, GOTO print.
 
-			"cmp r0, #'A' \n" // Compare r0 to 'A'.
-			"blt uppercase \n" // If more, GOTO print.
+			"cmp r0, #'a' \n" // Compare r0 to 'a'.
+			"bgt uppercase \n" // If more, GOTO print.
 
 			"lowercase: \n" // Lowercase label.
 			"add r0, r0, #13 \n" // Add 13 to r0.
