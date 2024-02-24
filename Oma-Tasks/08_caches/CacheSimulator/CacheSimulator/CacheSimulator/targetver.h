@@ -5,4 +5,5 @@
 // If you wish to build your application for a previous Windows platform, include WinSDKVer.h and
 // set the _WIN32_WINNT macro to the platform you wish to support before including SDKDDKVer.h.
 
-#include <SDKDDKVer.h>
+//#include <SDKDDKVer.h>
+#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\sdkddkver.h"
